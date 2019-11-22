@@ -4,13 +4,15 @@ import React, { Component } from 'react';
 class Screen extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            operations: []
+        }
     }
 
     render() {
         return(
             <div className="screen">
-                <p>{this.props.operations}</p>
-                <p>{this.props.results}</p>
+                <p operations={this.props.operations}>{this.operations}</p>
             </div>
         )
     }

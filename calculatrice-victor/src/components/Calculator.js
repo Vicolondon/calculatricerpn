@@ -7,10 +7,23 @@ class Calculator extends Component {
     constructor(props){
         super(props);
         this.state = {
-            Chiffrechoisi: 0,
-            operations: [],
+            chiffrechoisi: 0,
+            operations: [0,3,4],
             results: '0'
         }
+    }
+
+    handleClick = (e) => {
+        // this.setState({ chiffrechoisi: this.props.chiffrechoisi})
+        this.state.operations.push(Number(e));
+        this.setState({ operations: this.state.operations});
+        console.log( e );
+        console.log( this.state.operations );
+    }
+
+    showOnScreen = (e) => {
+        this.setState({ operations: this.state.operations.push(e)});
+        console.log( this.state.operations );
     }
 
     render() {
@@ -18,35 +31,35 @@ class Calculator extends Component {
         <header className="App-header">
             <h1>Calculatrice RPN</h1>
         </header>
-        <Screen/>
+        <Screen operations={this.operations}/>
               <table summary="Clavier (Christian)">
                   <tbody>
                       <tr>
-                          <td><Chiffre Chiffrechoisi="7"/></td>
-                          <td><Chiffre Chiffrechoisi="8"/></td>
-                          <td><Chiffre Chiffrechoisi="9"/></td>
-                          <td><Chiffre Chiffrechoisi="/"/></td>
+                          <td><Chiffre chiffrechoisi="7" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="8" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="9" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="/" handleClick={this.handleClick} /></td>
                       </tr>
                       <tr>
-                          <td><Chiffre Chiffrechoisi="4"/></td>
-                          <td><Chiffre Chiffrechoisi="5"/></td>
-                          <td><Chiffre Chiffrechoisi="6"/></td>
-                          <td><Chiffre Chiffrechoisi="*"/></td>
+                          <td><Chiffre chiffrechoisi="4" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="5" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="6" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="*" handleClick={this.handleClick} /></td>
                       </tr>
                       <tr>
-                          <td><Chiffre Chiffrechoisi="1"/></td>
-                          <td><Chiffre Chiffrechoisi="2"/></td>
-                          <td><Chiffre Chiffrechoisi="3"/></td>
-                          <td><Chiffre Chiffrechoisi="-"/></td>
+                          <td><Chiffre chiffrechoisi="1" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="2" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="3" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="-" handleClick={this.handleClick} /></td>
                       </tr>
                       <tr>
-                          <td><Chiffre Chiffrechoisi="C"/></td>
-                          <td><Chiffre Chiffrechoisi="0"/></td>
-                          <td><Chiffre Chiffrechoisi=","/></td>
-                          <td><Chiffre Chiffrechoisi="+/-"/></td>
+                          <td><Chiffre chiffrechoisi="C" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="0" handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="," handleClick={this.handleClick} /></td>
+                          <td><Chiffre chiffrechoisi="+/-" handleClick={this.handleClick} /></td>
                       </tr>
                       <tr>
-                          <th><Chiffre Chiffrechoisi="ENTER"/></th>
+                          <th><Chiffre chiffrechoisi="ENTER" handleClick={this.showOnScreen} /></th>
                       </tr>
                   </tbody>
               </table>
