@@ -5,14 +5,14 @@ class Screen extends Component {
     constructor(props){
         super(props);
         this.state = {
-            operations: []
+            operations: [0,0]
         }
     }
 
     render() {
         return(
             <div className="screen">
-                <p operations={this.props.operations}>{this.operations}</p>
+                <p operations={this.props.operations}>{this.state.operations}</p>
             </div>
         )
     }
