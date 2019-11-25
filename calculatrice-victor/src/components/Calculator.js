@@ -31,7 +31,12 @@ class Calculator extends Component {
 
         } else if ( e === '/' ){
                 
-        } else if ( e === '*' ){
+        } else if ( e === '+/-' ){
+            this.setState(state => ({
+                numberToAdd: (-1)*state.numberToAdd
+            }));
+                
+        }  else if ( e === '*' ){
                 
         } else if ( e === 'C' ){
             this.setState( state => ({
@@ -47,7 +52,7 @@ class Calculator extends Component {
             this.setState( state => ({
                 show_results: 0,
                 numberToAdd: '',
-                show_operations: '',
+                show_operations: state.show_results + " " + this.state.numberToAdd,
                 operations: [ ...state.operations, this.state.numberToAdd]
             }));
             // this.state.operations.push(Number(e));
