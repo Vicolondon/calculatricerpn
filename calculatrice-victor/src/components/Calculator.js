@@ -14,11 +14,10 @@ class Calculator extends Component {
             total: 0
         }
     }
-    
 
     handleClickChiffre = (e) => {
         // const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        if( this.state.numberToAdd === '0'){
+        if( this.state.numberToAdd === '0' || this.state.numberToAdd === 'NaN'){
             this.setState(state => ({
                 numberToAdd: state.numberToAdd = e
             }));
@@ -31,14 +30,32 @@ class Calculator extends Component {
 
     handleClickOperation = (e) => {
         console.log(e)
+        console.log( this.state.stack )
         if( this.hasTwoItems() ) {
             let lastTwoItems = this.getTwoNumbers();
             if( e === '+' ){
+                this.addfunction( lastTwoItems );
             } else if ( e === '-' ){
+                this.minusfunction( lastTwoItems );
             } else if ( e === '/' ){
+                this.dividefunction( lastTwoItems );
             } else if ( e === '+/-' ){
+                this.plusminusfunction();
             }  else if ( e === '*' ){
-            } else if ( e === 'C' ){
+                this.multiplyfunction( lastTwoItems );
+            }
+            /* else if ( e === 'C' ){
+                this.clearDisplay();
+            } else if ( e === 'CE' ){
+                this.clearAll();
+            }*/
+        } else {
+            if ( e === 'C' ){
+                this.clearDisplay();
+            } else if ( e === 'CE' ){
+                this.clearAll();
+            } else {
+                console.log('erreur nous avons besoin de plus de chiffre')
             }
         }
     }
@@ -53,11 +70,23 @@ class Calculator extends Component {
 
     // Enter button
     handleClickEnter = () => {
+        this.showfunction( this.state.numberToAdd );
         this.addToStack( this.state.numberToAdd );
         this.clearDisplay();
         console.log(this.state.stack);
+        this.showfunction()
     }
     
+    // Show function
+    showfunction = (  ) =>{
+        let objecttoshow = ''
+
+        this.state.stack.forEach(element => {
+            objecttoshow += ' ' + element
+        });
+
+        this.setState({show_operations: objecttoshow})
+    }
     // clear number to add
     clearDisplay = () => {
         this.setState({numberToAdd: '0'});
@@ -65,11 +94,12 @@ class Calculator extends Component {
 
     // Clear all
     clearAll = () => {
-        this.setState({numberToAdd: '0', stack: []});
+        this.setState({numberToAdd: '0', stack: [], show_operations:'', show_results: '0'});
     }
     
+    // 
     isFreshDisplay = () => {
-        return this.state.numberToAdd == '0';
+        return this.state.numberToAdd === '0';
     }
 
     hasTwoItems = () => {
@@ -80,8 +110,8 @@ class Calculator extends Component {
         var newStack = this.state.stack, first, second;
 
         // if we have a number in the display, that's the first
-        if (this.state.displayValue !== '0') {
-            second = this.state.displayValue;
+        if (this.state.numberToAdd !== '0') {
+            second = this.state.numberToAdd;
         } else {
             second = newStack.shift();
         }
@@ -94,9 +124,37 @@ class Calculator extends Component {
         return [first, second];
     }
 
-    add = ( numbers ) =>{
+    addfunction = ( numbers ) =>{
+        console.log( numbers );
         let newDisplayValue = parseFloat(numbers[0]) + parseFloat(numbers[1]);
-        this.setState({displayValue: newDisplayValue});
+        this.setState({numberToAdd: '0',show_results: newDisplayValue});
+    }
+
+    minusfunction = ( numbers ) =>{
+        console.log( numbers );
+        let newDisplayValue = parseFloat(numbers[0]) - parseFloat(numbers[1]);
+        // let newDisplayValue = Number(numbers[0]) - Number(numbers[1]);
+        this.setState({numberToAdd: '0',show_results: newDisplayValue});
+    }
+
+    multiplyfunction = ( numbers ) =>{
+        let newDisplayValue = parseFloat(numbers[0]) * parseFloat(numbers[1]);
+        this.setState({numberToAdd: '0',show_results: newDisplayValue});
+    }
+
+    dividefunction = ( numbers ) =>{
+        let newDisplayValue = parseFloat(numbers[0]) / parseFloat(numbers[1]);
+        this.setState({numberToAdd: '0',show_results: newDisplayValue});
+    }
+    
+    plusminusfunction = (  ) =>{
+        let newValue = this.state.numberToAdd;
+            
+        newValue = -newValue;
+
+        this.setState({
+            numberToAdd: newValue
+        });
     }
 
     render() {
@@ -136,7 +194,6 @@ class Calculator extends Component {
                         <td><Chiffre chiffrechoisi="-" handleClick={this.handleClickOperation} /></td>
                     </tr>
                     <tr>
-                        <td><Chiffre chiffrechoisi="C" handleClick={this.handleClickOperation} /></td>
                         <td><Chiffre chiffrechoisi="0" handleClick={this.handleClickChiffre} /></td>
                         <td><Chiffre chiffrechoisi="," handleClick={this.handleClickOperation} /></td>
                         <td><Chiffre chiffrechoisi="+" handleClick={this.handleClickOperation} /></td>
@@ -144,6 +201,8 @@ class Calculator extends Component {
                     <tr>
                         <td><Chiffre chiffrechoisi="ENTER" handleClick={this.handleClickEnter} /></td>
                         <td><Chiffre chiffrechoisi="+/-" handleClick={this.handleClickOperation} /></td>
+                        <td><Chiffre chiffrechoisi="CE" handleClick={this.handleClickOperation} /></td>
+                        <td><Chiffre chiffrechoisi="C" handleClick={this.handleClickOperation} /></td>
                     </tr>
                   </tbody>
             </table>
