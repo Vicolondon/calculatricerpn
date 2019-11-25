@@ -7,8 +7,8 @@ class Calculator extends Component {
         this.state = {
             title: 'Calculatrice RPN',
             // chiffrechoisi: 0,
-            operations: [],
-            numberToAdd: '',
+            stack: [],
+            numberToAdd: '0',
             show_operations: '',
             show_results: 0,
             total: 0
@@ -18,48 +18,85 @@ class Calculator extends Component {
 
     handleClickChiffre = (e) => {
         // const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        if( this.state.numberToAdd === '0'){
+            this.setState(state => ({
+                numberToAdd: state.numberToAdd = e
+            }));
+        } else{
             this.setState(state => ({
                 numberToAdd: state.numberToAdd += e
             }));
+        }
     }
 
     handleClickOperation = (e) => {
         console.log(e)
-        if( e === '+' ){
-
-        } else if ( e === '-' ){
-
-        } else if ( e === '/' ){
-                
-        } else if ( e === '+/-' ){
-            this.setState(state => ({
-                numberToAdd: (-1)*state.numberToAdd
-            }));
-                
-        }  else if ( e === '*' ){
-                
-        } else if ( e === 'C' ){
-            this.setState( state => ({
-                show_results: 0,
-                numberToAdd: '',
-                show_operations: ''
-            }));
-            console.log( this.state.numberToAdd );
+        if( this.hasTwoItems() ) {
+            let lastTwoItems = this.getTwoNumbers();
+            if( e === '+' ){
+            } else if ( e === '-' ){
+            } else if ( e === '/' ){
+            } else if ( e === '+/-' ){
+            }  else if ( e === '*' ){
+            } else if ( e === 'C' ){
+            }
         }
     }
+ 
+    // add to stack function   
+    addToStack =(number) => {
+        var newStack = this.state.stack;
 
+        newStack.unshift(number);
+        this.setState({ stack: newStack });
+    }
+
+    // Enter button
     handleClickEnter = () => {
-            this.setState( state => ({
-                show_results: 0,
-                numberToAdd: '',
-                show_operations: state.show_results + " " + this.state.numberToAdd,
-                operations: [ ...state.operations, this.state.numberToAdd]
-            }));
-            // this.state.operations.push(Number(e));
-            // this.setState({
-            //     operations: this.state.operations
-            // });
-            console.log(this.state.operations);
+        this.addToStack( this.state.numberToAdd );
+        this.clearDisplay();
+        console.log(this.state.stack);
+    }
+    
+    // clear number to add
+    clearDisplay = () => {
+        this.setState({numberToAdd: '0'});
+    }
+
+    // Clear all
+    clearAll = () => {
+        this.setState({numberToAdd: '0', stack: []});
+    }
+    
+    isFreshDisplay = () => {
+        return this.state.numberToAdd == '0';
+    }
+
+    hasTwoItems = () => {
+        return (!this.isFreshDisplay() && this.state.stack.length > 0) || this.state.stack.length > 1;
+    }
+    
+    getTwoNumbers = () => {
+        var newStack = this.state.stack, first, second;
+
+        // if we have a number in the display, that's the first
+        if (this.state.displayValue !== '0') {
+            second = this.state.displayValue;
+        } else {
+            second = newStack.shift();
+        }
+
+        // and the second comes form the stack
+        first = newStack.shift();
+
+        this.setState({ stack: newStack });
+
+        return [first, second];
+    }
+
+    add = ( numbers ) =>{
+        let newDisplayValue = parseFloat(numbers[0]) + parseFloat(numbers[1]);
+        this.setState({displayValue: newDisplayValue});
     }
 
     render() {
