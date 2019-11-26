@@ -60,12 +60,37 @@ class Calculator extends Component {
         }
     }
  
-    // add to stack function   
+    // function to add a number to stack
     addToStack =(number) => {
         var newStack = this.state.stack;
 
         newStack.unshift(number);
         this.setState({ stack: newStack });
+    }
+ 
+    // function to drop a number from stack
+    dropfunction = (  ) => {
+        var lastnumber = this.state.stack;
+        lastnumber.shift();
+        
+        this.showfunction();
+
+        this.setState({ stack: lastnumber });
+    }
+ 
+    // function to drop a number from stack
+    swapfunction = (  ) => {
+        var lastnumber = this.state.stack;
+        var firstlastnumber = this.state.stack[0];
+        var secondlastnumber = this.state.stack[1];
+        lastnumber.shift();
+        lastnumber.shift();
+
+        this.setState({ stack: [secondlastnumber, firstlastnumber, ...lastnumber] });
+
+        setInterval(()=>{
+            this.showfunction();
+        }, 200)
     }
 
     // Enter button
@@ -73,7 +98,6 @@ class Calculator extends Component {
         this.showfunction( this.state.numberToAdd );
         this.addToStack( this.state.numberToAdd );
         this.clearDisplay();
-        console.log(this.state.stack);
         this.showfunction()
     }
     
@@ -97,15 +121,17 @@ class Calculator extends Component {
         this.setState({numberToAdd: '0', stack: [], show_operations:'', show_results: '0'});
     }
     
-    // 
+    // Function to clear the number to add
     isFreshDisplay = () => {
         return this.state.numberToAdd === '0';
     }
 
+    // Function to verify if the stack has a least 2 items
     hasTwoItems = () => {
         return (!this.isFreshDisplay() && this.state.stack.length > 0) || this.state.stack.length > 1;
     }
     
+    // Function to get the last two numbers of the stack
     getTwoNumbers = () => {
         var newStack = this.state.stack, first, second;
 
@@ -125,25 +151,26 @@ class Calculator extends Component {
     }
 
     addfunction = ( numbers ) =>{
-        console.log( numbers );
         let newDisplayValue = parseFloat(numbers[0]) + parseFloat(numbers[1]);
+        this.addToStack( newDisplayValue );
         this.setState({numberToAdd: '0',show_results: newDisplayValue});
     }
 
     minusfunction = ( numbers ) =>{
-        console.log( numbers );
         let newDisplayValue = parseFloat(numbers[0]) - parseFloat(numbers[1]);
-        // let newDisplayValue = Number(numbers[0]) - Number(numbers[1]);
+        this.addToStack( newDisplayValue );
         this.setState({numberToAdd: '0',show_results: newDisplayValue});
     }
 
     multiplyfunction = ( numbers ) =>{
         let newDisplayValue = parseFloat(numbers[0]) * parseFloat(numbers[1]);
+        this.addToStack( newDisplayValue );
         this.setState({numberToAdd: '0',show_results: newDisplayValue});
     }
 
     dividefunction = ( numbers ) =>{
         let newDisplayValue = parseFloat(numbers[0]) / parseFloat(numbers[1]);
+        this.addToStack( newDisplayValue );
         this.setState({numberToAdd: '0',show_results: newDisplayValue});
     }
     
@@ -194,8 +221,9 @@ class Calculator extends Component {
                         <td><Chiffre chiffrechoisi="-" handleClick={this.handleClickOperation} /></td>
                     </tr>
                     <tr>
+                        <td><Chiffre chiffrechoisi="DROP" handleClick={this.dropfunction} /></td>
                         <td><Chiffre chiffrechoisi="0" handleClick={this.handleClickChiffre} /></td>
-                        <td><Chiffre chiffrechoisi="," handleClick={this.handleClickOperation} /></td>
+                        <td><Chiffre chiffrechoisi="SWAP" handleClick={this.swapfunction} /></td>
                         <td><Chiffre chiffrechoisi="+" handleClick={this.handleClickOperation} /></td>
                     </tr>
                     <tr>
