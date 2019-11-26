@@ -10,8 +10,7 @@ class Calculator extends Component {
             stack: [],
             numberToAdd: '0',
             show_operations: '',
-            show_results: 0,
-            total: 0
+            show_results: 0
         }
     }
 
@@ -29,8 +28,6 @@ class Calculator extends Component {
     }
 
     handleClickOperation = (e) => {
-        console.log(e)
-        console.log( this.state.stack )
         if( this.hasTwoItems() ) {
             let lastTwoItems = this.getTwoNumbers();
             if( e === '+' ){
@@ -55,9 +52,14 @@ class Calculator extends Component {
             } else if ( e === 'CE' ){
                 this.clearAll();
             } else {
-                console.log('erreur nous avons besoin de plus de chiffre')
+                // console.log('erreur nous avons besoin de plus de chiffre')
             }
         }
+
+        setTimeout(()=>{
+            this.showfunction();
+        }, 200)
+
     }
  
     // function to add a number to stack
@@ -88,7 +90,7 @@ class Calculator extends Component {
 
         this.setState({ stack: [secondlastnumber, firstlastnumber, ...lastnumber] });
 
-        setInterval(()=>{
+        setTimeout(()=>{
             this.showfunction();
         }, 200)
     }
@@ -191,13 +193,13 @@ class Calculator extends Component {
         </header>
         <div className="showscreen">
             <div className="operations">
-                <p>{this.state.show_operations}</p>
+                <p>La pile: {this.state.show_operations}</p>
             </div>
             <div className="numbertoadd">
-                <p>{this.state.numberToAdd}</p>
+                <p>Nombre à ajouter: {this.state.numberToAdd}</p>
             </div>
             <div className="showresults">
-                <p>{this.state.show_results}</p>
+                <p>Résultat: {this.state.show_results}</p>
             </div>
         </div>
             <table summary="Clavier (Christian)">
